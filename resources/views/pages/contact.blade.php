@@ -7,15 +7,16 @@
         <div class="col-md-12">
             <h1>Contact Me</h1>
             <hr>
-            <form>
+            <form action="{{ url('contact') }}" method="POST">
+                {{ csrf_field() }}
                 <div class="form-group">
                     <label name="email">Email:</label>
-                    <input id="email" name="email" class="form-control">
+                    <input type="email" id="email" name="email" class="form-control">
                 </div>
 
                 <div class="form-group">
                     <label name="subject">Subject:</label>
-                    <textarea id="email" name="email" class="form-control"></textarea>
+                    <textarea id="subject" name="subject" class="form-control"></textarea>
                 </div>
 
                 <div class="form-group">

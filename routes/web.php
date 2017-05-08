@@ -35,9 +35,10 @@ Route::resource('tags', 'TagController', ['except' => ['create']]);
 //Site
 Route::get('blog/{slug}', ['uses' => 'BlogController@getSingle', 'as' => 'blog.single'])->where('slug', '[\w\d\-\_]+');
 Route::get('blog', ['uses' => 'BlogController@getIndex', 'as' => 'blog.index']);
-Route::get('/', 'PagesController@getIndex');
+Route::get('/', 'PagesController@getIndex')->name('home');
 Route::resource('posts', 'PostController');
 
 //Static pages
-Route::get('/contact', 'PagesController@getContact');
+Route::get('contact', 'PagesController@getContact');
+Route::post('contact', 'PagesController@postContact');
 Route::get('/about', 'PagesController@getAbout');
