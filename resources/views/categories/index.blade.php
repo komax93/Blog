@@ -15,7 +15,6 @@
                     </tr>
                 </thead>
                 <tbody>
-
                     @foreach($categories as $category)
                         <tr>
                             <th>{{ $category->id }}</th>

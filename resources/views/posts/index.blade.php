@@ -28,16 +28,16 @@
                     <th>Created At</th>
                     <th></th>
                 </thead>
-
                 <tbody>
                     @foreach ($posts as $post)
                         <tr>
-                            <th>{{$post->id}}</th>
-                            <td>{{substr($post->title, 0, 50)}}{{strlen($post->title) > 50 ? "..." : ""}}</td>
-                            <td>{{substr(strip_tags($post->body), 0, 50)}}{{strlen(strip_tags($post->body)) > 50 ? "..." : ""}}</td>
-                            <td>{{date('M j, Y', strtotime($post->created_at))}}</td>
+                            <th>{{ $post->id }}</th>
+                            <td>{{ str_limit($post->title, 50) }}</td>
+                            <td>{{ str_limit(strip_tags($post->body), 50) }}</td>
+                            <td>{{ date('M j, Y', strtotime($post->created_at)) }}</td>
                             <td><a href="{{ route('posts.show', $post->id) }}" class="btn btn-default btn-sm">View</a>
-                                <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-default btn-sm">Edit</a></td>
+                                <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-default btn-sm">Edit</a>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

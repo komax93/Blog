@@ -1,40 +1,54 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+# Laravel Blog
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
 
-## About Laravel
+## Laravel Blog Installation
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+To successfully install on the server, you need to do the following:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1. <strong>Clone a project;</strong>
+1. <strong>Run composer install in project directory;</strong>
+1. <strong>Create .env file (fill only necessary fields);</strong>
+1. <strong>Run php artisan key:generate in project folder;</strong>
+1. <strong>Project permissions:</strong> sudo chgrp -R www-data storage bootstrap/cache | sudo chmod -R ug+rwx storage bootstrap/cache
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb combination of simplicity, elegance, and innovation give you tools you need to build any application with which you are tasked.
+## Nginx config example:
 
-## Learning Laravel
+```
+server {
+        listen 80;
+        server_name blog.dev www.blog.dev;
+        root /home/user/develop/laravel_blog/public;
+	    index index.html index.htm index.php;
 
-Laravel has the most extensive and thorough documentation and video tutorial library of any modern web application framework. The [Laravel documentation](https://laravel.com/docs) is thorough, complete, and makes it a breeze to get started learning the framework.
+        charset utf-8;
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 900 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+        client_max_body_size 100m;
+     
+        gzip on;
+        gzip_disable "msie6";
+        gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript;
 
-## Contributing
+        location / {
+                try_files $uri $uri/ /index.php?$query_string;
+        }
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+	    location ~ \.php$ {
+        		fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+        		fastcgi_pass unix:/var/run/php5-fpm.sock;
+        		fastcgi_index index.php;
+        		fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        		include fastcgi_params;
 
-## Security Vulnerabilities
+                fastcgi_intercept_errors off;
+                fastcgi_buffer_size 16k;
+                fastcgi_buffers 4 16k;
+                fastcgi_connect_timeout 75;
+                fastcgi_send_timeout 300;
+                fastcgi_read_timeout 300;
+	}
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+        location ~ /\.ht {
+                deny all;
+        }
+}
+```
